@@ -12,6 +12,15 @@ WINDOW = pygame.display.set_mode((1200, 800))
 FPS = 60
 
 
+def get_coords_from_mouse(position):
+    (x, y) = position
+    
+    if x > BOARD_WIDTH:
+        return None
+
+    return (x // SQUARE_SIZE, y // SQUARE_SIZE)
+
+
 def main():
     pygame.display.set_caption("pyCheckers")
 
