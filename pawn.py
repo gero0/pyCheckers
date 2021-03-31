@@ -65,8 +65,8 @@ class Queen(Pawn):
         possibleMoves = []
 
         # Queen can move in any direction
-        moves = Pawn.getPossibleMoves(self, board, False)
-        inverted_moves = Pawn.getPossibleMoves(self, board, True)
+        moves = Pawn.getPossibleMoves(self)
+        inverted_moves = Pawn.getPossibleMoves(self)
 
         possibleMoves = moves + inverted_moves
 

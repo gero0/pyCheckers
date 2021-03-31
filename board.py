@@ -1,4 +1,4 @@
-from pawn import Pawn
+from pawn import Pawn, Queen
 import pygame
 from player_color import PlayerColor
 
@@ -36,6 +36,23 @@ class Board:
         self.board[coordinates] = piece
         self.board[piece.coordinates] = None
         piece.move(coordinates)
+
+    def capture_piece(self, piece):
+        self.board[piece.coordinates] = None
+
+    def promote_piece(self, piece):
+        color = piece.color
+        self.board[piece.coordinates] = Queen(
+            color, self.square_size, piece.coordinates)
+
+    def pieces_left(self, color):
+        counter = 0
+        for row in range(8):
+            for column in range(8):
+                square = self.board[(row, column)]
+                if square != None and square.get_color() == color:
+                    counter += 1
+        return counter
 
     def draw(self, display):
         display.fill((255, 255, 255))
