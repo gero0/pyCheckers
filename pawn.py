@@ -51,16 +51,9 @@ class Pawn:
 
         return possibleMoves
 
-    def move(self, board, move):
-        (coordinates, capture) = move
-
+    def move(self, coordinates):
         # Set own coordinates to
-        self.coordinates = move.coordinates
-        board.get_board()[self.coordinates] = self
-
-        # delete captured pieces from board
-        if capture is not None:
-            capture = None
+        self.coordinates = coordinates
 
     def draw(self, display):
         (x, y) = self.coordinates
@@ -68,7 +61,7 @@ class Pawn:
 
 
 class Queen(Pawn):
-    def getPossibleMoves(self, board):
+    def getPossibleMoves(self, coordinates):
         possibleMoves = []
 
         # Queen can move in any direction

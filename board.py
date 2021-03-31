@@ -26,11 +26,16 @@ class Board:
                     self.board[(row, column)] = None
 
     def get_square(self, coordinates):
-        if coordinates in self.__board:
+        if coordinates in self.board:
             return self.board[coordinates]
 
     def get_board(self):
         return self.__board
+
+    def move_piece(self, piece, coordinates):
+        self.board[coordinates] = piece
+        self.board[piece.coordinates] = None
+        piece.move(coordinates)
 
     def draw(self, display):
         display.fill((255, 255, 255))
