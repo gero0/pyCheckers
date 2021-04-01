@@ -11,7 +11,7 @@ tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 PORT = 65432
 
-
+# Wait for incoming connections and set the socket to client's connections
 def wait_for_connections():
     global opponent_connection
     global opponent_address
@@ -36,6 +36,7 @@ def wait_for_connections():
     print(conn, addr)
 
 
+# Try to connect to server
 def connect_to_server(host):
     global opponent_connection
     global opponent_address
@@ -54,6 +55,8 @@ def connect_to_server(host):
 
 
 def get_coords_from_mouse(position):
+    """Gets position of the mouse and returns the coordinates of square it points to.
+    In case it wasn't pointing at any square, the function returns None"""
     (x, y) = position
 
     if x > BOARD_WIDTH:

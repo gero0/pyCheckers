@@ -26,6 +26,7 @@ class Board:
                     self.board[(column, row)] = EmptySquare((column, row))
 
     def get_square(self, coordinates):
+        """Returns a square with these coordinates (either EmptySquare or a piece)"""
         if coordinates in self.board:
             return self.board[coordinates]
 
@@ -33,6 +34,7 @@ class Board:
         return self.__board
 
     def move_piece(self, piece, coordinates):
+        """Moves a piece and updates its coordinates. Promotes piece if possible"""
         (_, y) = coordinates
         self.board[coordinates] = piece
         self.board[piece.coordinates] = EmptySquare(piece.coordinates)
@@ -42,14 +44,17 @@ class Board:
             self.promote_piece(piece)
 
     def capture_piece(self, piece):
+        """Removes a piece from the board"""
         self.board[piece.coordinates] = EmptySquare(piece.coordinates)
 
     def promote_piece(self, piece):
+        """Replaces a piece with a Queen"""
         color = piece.color
         self.board[piece.coordinates] = Queen(
             color, self.square_size, piece.coordinates)
 
     def pieces_left(self, color):
+        """Returns a number of pieces left of given color"""
         counter = 0
         for row in range(8):
             for column in range(8):
@@ -69,6 +74,7 @@ class Board:
                     self.board[(column, row)].draw(display)
 
     def any_moves_and_jumps(self, player):
+        """Returns True if player can perform any moves or jumps"""
         for row in range(8):
             for column in range(8):
                 square = self.board[(column, row)]
@@ -82,6 +88,7 @@ class Board:
         return False
 
     def any_jumps(self, player):
+        """Returns True if player can perform any jumps"""
         for row in range(8):
             for column in range(8):
                 square = self.board[(column, row)]

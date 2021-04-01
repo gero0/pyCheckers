@@ -20,7 +20,9 @@ class Game:
         self.font = pygame.font.Font('ArialCE.ttf', 24)
         self.socket = socket
 
+
     def update(self):
+        """Draws the board and waits for opponnent's turn if it's not the player's turn"""
         self.board.draw(WINDOW)
 
         if self.winner is not None:
@@ -55,6 +57,8 @@ class Game:
             self.wait_for_opponent()
 
     def select_square(self, coordinates):
+        """Selects a square. If it's a piece, possible jumps and possible moves are displayed on the board.
+        If it's an empty square, it checks if current piece can move to that square and moves the piece if it can"""
         # We can only select squares during out turn
         if self.turn != self.player_color:
             return
@@ -96,6 +100,7 @@ class Game:
                     self.end_turn()
 
     def end_turn(self):
+        """Called after players turn, it switches current turn to other player and cleans valid moves and valid jumps arrays"""
         self.valid_moves = []
         self.valid_jumps = []
         self.selected_piece = None
@@ -108,6 +113,7 @@ class Game:
         self.check_lose()
 
     def end_game(self, winner):
+        """Displays winner message"""
         self.winner = winner
         print("Winner: ", winner)
 
@@ -118,6 +124,7 @@ class Game:
             return "Black"
 
     def check_lose(self):
+        """Check if the player has lost all pieces or cannot make any moves"""
         player = self.turn
         if self.board.pieces_left(player) == 0 or self.board.any_moves_and_jumps(player) == False:
             if player == PlayerColor.WHITE:
@@ -126,6 +133,7 @@ class Game:
                 self.end_game(PlayerColor.WHITE)
 
     def send_move(self, move, captures):
+        """Sends the move to other player in json format"""
         caps = []
         if captures is not None:
             caps = [capture.get_coordinates() for capture in captures]
@@ -139,6 +147,7 @@ class Game:
         self.process_move(j)
 
     def process_move(self, json):
+        """Reads received json and performs action described in it (moving and capturing pieces)"""
         move = json["move"]
         captures = []
         try:  # in case there's' no captures
