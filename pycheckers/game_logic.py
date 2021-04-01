@@ -69,8 +69,9 @@ class Game:
                 self.valid_moves = []
 
                 if len(self.valid_jumps) == 0:
-                    self.valid_moves = self.selected_piece.get_possible_moves(
-                        self.board)
+                    if not self.board.any_jumps(self.player_color):
+                        self.valid_moves = self.selected_piece.get_possible_moves(
+                            self.board)
         else:
             if self.selected_piece is not None:
 
