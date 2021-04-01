@@ -1,0 +1,8 @@
+import pygame
+
+BOARD_WIDTH, BOARD_HEIGHT = 800, 800
+ROWS, COLUMNS = 8, 8
+SQUARE_SIZE = BOARD_WIDTH // COLUMNS
+
+FPS = 60
+WINDOW = pygame.display.set_mode((1200, 800))

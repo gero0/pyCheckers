@@ -1,7 +1,6 @@
-from pawn import Pawn, Queen
 import pygame
+from pawn import EmptySquare, Pawn, Queen
 from player_color import PlayerColor
-
 
 class Board:
     def __init__(self, square_size):
@@ -15,15 +14,15 @@ class Board:
             for column in range(8):
                 if (column % 2 == 0 and row % 2 == 0) or (column % 2 != 0 and row % 2 != 0):
                     if row < 3:
-                        self.board[(row, column)] = Pawn(
+                        self.board[(column, row)] = Pawn(
                             PlayerColor.WHITE, square_size, (column, row))
                     elif row > 4:
-                        self.board[(row, column)] = Pawn(
+                        self.board[(column, row)] = Pawn(
                             PlayerColor.BLACK, square_size, (column, row))
                     else:
-                        self.board[(row, column)] = None
+                        self.board[(column, row)] = EmptySquare((column, row))
                 else:
-                    self.board[(row, column)] = None
+                    self.board[(column, row)] = EmptySquare((column, row))
 
     def get_square(self, coordinates):
         if coordinates in self.board:
@@ -33,12 +32,17 @@ class Board:
         return self.__board
 
     def move_piece(self, piece, coordinates):
+        (_, y) = coordinates
         self.board[coordinates] = piece
-        self.board[piece.coordinates] = None
+        self.board[piece.coordinates] = EmptySquare(piece.coordinates)
         piece.move(coordinates)
 
+        if y == 7 or y == 0:
+            self.promote_piece(piece)
+        
+
     def capture_piece(self, piece):
-        self.board[piece.coordinates] = None
+        self.board[piece.coordinates] = EmptySquare(piece.coordinates)
 
     def promote_piece(self, piece):
         color = piece.color
@@ -49,8 +53,8 @@ class Board:
         counter = 0
         for row in range(8):
             for column in range(8):
-                square = self.board[(row, column)]
-                if square != None and square.get_color() == color:
+                square = self.board[(column, row)]
+                if not isinstance(square, EmptySquare) and square.get_color() == color:
                     counter += 1
         return counter
 
@@ -60,5 +64,6 @@ class Board:
 
         for row in range(8):
             for column in range(8):
-                if self.board[(row, column)] is not None:
-                    self.board[(row, column)].draw(display)
+                t = isinstance(self.board[(column, row)], EmptySquare) 
+                if not t:
+                    self.board[(column, row)].draw(display)

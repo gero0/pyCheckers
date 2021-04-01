@@ -1,20 +1,11 @@
+from game_logic import Game
 import pygame
+from constants import *
 from player_color import PlayerColor
-from board import Board
-from pawn import Pawn
-
-BOARD_WIDTH, BOARD_HEIGHT = 800, 800
-ROWS, COLUMNS = 8, 8
-SQUARE_SIZE = BOARD_WIDTH // COLUMNS
-
-WINDOW = pygame.display.set_mode((1200, 800))
-
-FPS = 60
-
 
 def get_coords_from_mouse(position):
     (x, y) = position
-    
+
     if x > BOARD_WIDTH:
         return None
 
@@ -26,12 +17,12 @@ def main():
 
     run = True
     clock = pygame.time.Clock()
-
-    board = Board(SQUARE_SIZE)
+    game = Game(PlayerColor.WHITE)
 
     while run:
         clock.tick(FPS)
-        board.draw(WINDOW)
+        
+        game.update()
 
         pygame.display.update()
 
@@ -40,6 +31,8 @@ def main():
                 run = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
+                coords = get_coords_from_mouse(event.pos)
+                game.select_square(coords)
                 pass
 
 
