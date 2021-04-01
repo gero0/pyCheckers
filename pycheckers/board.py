@@ -1,6 +1,6 @@
 import pygame
-from pawn import EmptySquare, Pawn, Queen
-from player_color import PlayerColor
+from pycheckers.pawn import EmptySquare, Pawn, Queen
+from pycheckers.player_color import PlayerColor
 
 
 class Board:

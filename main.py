@@ -1,6 +1,6 @@
-from game_logic import Game
-from constants import *
-from player_color import PlayerColor
+from pycheckers.game_logic import Game
+from pycheckers.constants import *
+from pycheckers.player_color import PlayerColor
 import pygame
 import socket
 import sys

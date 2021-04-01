@@ -1,7 +1,7 @@
-from pawn import EmptySquare
-from player_color import PlayerColor
-from board import Board
-from constants import *
+from pycheckers.pawn import EmptySquare
+from pycheckers.player_color import PlayerColor
+from pycheckers.board import Board
+from pycheckers.constants import *
 import pygame
 import asyncio
 import json
@@ -129,7 +129,7 @@ class Game:
         if captures is not None:
             caps = [capture.get_coordinates() for capture in captures]
         j = json.dumps({"move": move, "captures": caps})
-        print(j)
+
         self.socket.sendall(j.encode())
 
     def wait_for_opponent(self):
@@ -144,8 +144,6 @@ class Game:
             captures = json["captures"]
         except:
             pass
-
-        print(move, captures)
 
         (current, dest) = move
         piece = self.board.get_square(tuple(current))

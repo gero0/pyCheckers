@@ -1,5 +1,5 @@
 import pygame
-from player_color import PlayerColor
+from pycheckers.player_color import PlayerColor
 
 
 class EmptySquare:
