@@ -3,10 +3,12 @@ from player_color import PlayerColor
 from board import Board
 from constants import *
 import pygame
+import asyncio
+import json
 
 
 class Game:
-    def __init__(self, player_color):
+    def __init__(self, player_color, socket):
         self.selected_piece = None
         self.board = Board(SQUARE_SIZE)
         self.turn = PlayerColor.WHITE
@@ -16,6 +18,7 @@ class Game:
         self.move_img = pygame.image.load('img/green.png')
         self.winner = None
         self.font = pygame.font.Font('ArialCE.ttf', 24)
+        self.socket = socket
 
     def update(self):
         self.board.draw(WINDOW)
@@ -45,6 +48,11 @@ class Game:
             WINDOW.blit(self.move_img,
                         (x * SQUARE_SIZE, y * SQUARE_SIZE))
 
+        pygame.display.update()
+
+        if self.player_color != self.turn and self.winner is None:
+            self.wait_for_opponent()
+
     def select_square(self, coordinates):
         # We can only select squares during out turn
         if self.turn != self.player_color:
@@ -68,14 +76,21 @@ class Game:
                 for jump in self.valid_jumps:
                     (coords, captures) = jump
                     if coordinates == coords:
+                        move = (self.selected_piece.get_coordinates(),
+                                coordinates)
                         self.board.move_piece(self.selected_piece, coordinates)
                         for capture in captures:
                             self.board.capture_piece(capture)
+
+                        self.send_move(move, captures)
                         self.end_turn()
+
                         return
 
                 if coordinates in self.valid_moves:
+                    move = (self.selected_piece.get_coordinates(), coordinates)
                     self.board.move_piece(self.selected_piece, coordinates)
+                    self.send_move(move, [])
                     self.end_turn()
 
     def end_turn(self):
@@ -89,8 +104,6 @@ class Game:
             self.turn = PlayerColor.WHITE
 
         self.check_lose()
-        # DELETE LATER
-        self.player_color = self.turn
 
     def end_game(self, winner):
         self.winner = winner
@@ -109,3 +122,36 @@ class Game:
                 self.end_game(PlayerColor.BLACK)
             else:
                 self.end_game(PlayerColor.WHITE)
+
+    def send_move(self, move, captures):
+        caps = []
+        if captures is not None:
+            caps = [capture.get_coordinates() for capture in captures]
+        j = json.dumps({"move": move, "captures": caps})
+        print(j)
+        self.socket.sendall(j.encode())
+
+    def wait_for_opponent(self):
+        data = self.socket.recv(1024)
+        j = json.loads(data)
+        self.process_move(j)
+
+    def process_move(self, json):
+        move = json["move"]
+        captures = []
+        try:  # in case there's' no captures
+            captures = json["captures"]
+        except:
+            pass
+
+        print(move, captures)
+
+        (current, dest) = move
+        piece = self.board.get_square(tuple(current))
+        self.board.move_piece(piece, tuple(dest))
+
+        for capture in captures:
+            piece = self.board.get_square(tuple(capture))
+            self.board.capture_piece(piece)
+
+        self.end_turn()
