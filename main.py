@@ -4,6 +4,7 @@ from constants import *
 from player_color import PlayerColor
 
 
+
 def get_coords_from_mouse(position):
     (x, y) = position
 
@@ -14,6 +15,8 @@ def get_coords_from_mouse(position):
 
 
 def main():
+    pygame.init()
+    pygame.font.init()
     pygame.display.set_caption("pyCheckers")
 
     run = True

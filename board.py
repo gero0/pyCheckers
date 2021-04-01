@@ -67,3 +67,28 @@ class Board:
                 t = isinstance(self.board[(column, row)], EmptySquare)
                 if not t:
                     self.board[(column, row)].draw(display)
+
+    def any_moves_and_jumps(self, player):
+        for row in range(8):
+            for column in range(8):
+                square = self.board[(column, row)]
+                if not isinstance(square, EmptySquare) and square.get_color() == player:
+                    jumps = square.get_possible_jumps(self)
+                    moves = square.get_possible_moves(self)
+
+                    if len(jumps) != 0 or len(moves) != 0:
+                        return True
+
+        return False
+
+    def any_jumps(self, player):
+        for row in range(8):
+            for column in range(8):
+                square = self.board[(column, row)]
+                if not isinstance(square, EmptySquare) and square.get_color() == player:
+                    jumps = square.get_possible_jumps(self)
+
+                    if len(jumps) != 0:
+                        return True
+
+        return False

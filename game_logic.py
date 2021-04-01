@@ -14,9 +14,25 @@ class Game:
         self.valid_jumps = []
         self.valid_moves = []
         self.move_img = pygame.image.load('img/green.png')
+        self.winner = None
+        self.font = pygame.font.Font('ArialCE.ttf', 24)
 
     def update(self):
         self.board.draw(WINDOW)
+
+        if self.winner is not None:
+            img1 = self.font.render(
+                "Winner: " + Game.player_color_string(self.winner), False, (0, 0, 0))
+            WINDOW.blit(img1, (820, 0))
+            return
+
+        you_img = self.font.render(
+            "You're playing as: " + Game.player_color_string(self.player_color), False, (0, 0, 0))
+        turn_img = self.font.render(
+            "Turn: " + Game.player_color_string(self.turn), False, (0, 0, 0))
+
+        WINDOW.blit(you_img, (820, 50))
+        WINDOW.blit(turn_img, (820, 100))
 
         for jump in self.valid_jumps:
             coordinates = jump[0]
@@ -72,5 +88,24 @@ class Game:
         else:
             self.turn = PlayerColor.WHITE
 
+        self.check_lose()
         # DELETE LATER
         self.player_color = self.turn
+
+    def end_game(self, winner):
+        self.winner = winner
+        print("Winner: ", winner)
+
+    def player_color_string(color):
+        if color == PlayerColor.WHITE:
+            return "White"
+        elif color == PlayerColor.BLACK:
+            return "Black"
+
+    def check_lose(self):
+        player = self.turn
+        if self.board.pieces_left(player) == 0 or self.board.any_moves_and_jumps(player) == False:
+            if player == PlayerColor.WHITE:
+                self.end_game(PlayerColor.BLACK)
+            else:
+                self.end_game(PlayerColor.WHITE)
