@@ -3,9 +3,8 @@ from player_color import PlayerColor
 
 
 class EmptySquare:
-    def __init__(self,coordinates):
+    def __init__(self, coordinates):
         self.coordinates = coordinates
-    
 
 
 class Pawn:
@@ -37,16 +36,14 @@ class Pawn:
         if isinstance(square, EmptySquare):
             possibleMoves.append((x + 1, y + 1 * self.direction))
 
-
         square = board.get_square((x - 1, y + 1 * self.direction))
         if isinstance(square, EmptySquare):
             possibleMoves.append((x - 1, y + 1 * self.direction))
 
-
         return possibleMoves
 
     def get_possible_jumps(self, board):
-        
+
         return Pawn.possible_jumps(self, board, self.direction, self.color, [])
 
     def possible_jumps(square, board, direction, color, captures):
@@ -60,14 +57,16 @@ class Pawn:
                 (x + 2, y + 2 * direction))
 
             if isinstance(square_behind_opponent, EmptySquare):
-                #captures.append(right_square)
-                jumps = Pawn.possible_jumps(square_behind_opponent, board, direction, color, captures + [right_square])
+                # captures.append(right_square)
+                jumps = Pawn.possible_jumps(
+                    square_behind_opponent, board, direction, color, captures + [right_square])
                 # check if array empty
                 if not jumps:
-                    possibleJumps.append( ( (x + 2, y + 2 * direction), captures + [right_square] ))
+                    possibleJumps.append(
+                        ((x + 2, y + 2 * direction), captures + [right_square]))
                 else:
                     for jump in jumps:
-                     possibleJumps.append(jump)
+                        possibleJumps.append(jump)
 
         left_square = board.get_square((x - 1, y + 1 * direction))
 
@@ -76,13 +75,14 @@ class Pawn:
                 (x - 2, y + 2 * direction))
 
             if isinstance(square_behind_opponent, EmptySquare):
-                jumps = Pawn.possible_jumps(square_behind_opponent, board, direction, color, captures + [left_square])
+                jumps = Pawn.possible_jumps(
+                    square_behind_opponent, board, direction, color, captures + [left_square])
                 if not jumps:
-                    possibleJumps.append(((x - 2, y + 2 * direction), captures + [left_square]))
+                    possibleJumps.append(
+                        ((x - 2, y + 2 * direction), captures + [left_square]))
                 else:
                     for jump in jumps:
-                     possibleJumps.append(jump)
-
+                        possibleJumps.append(jump)
 
         return possibleJumps
 
@@ -96,6 +96,7 @@ class Pawn:
 
     def get_coordinates(self):
         return self.coordinates
+
 
 class Queen(Pawn):
     def get_possible_moves(self, board):
@@ -126,28 +127,32 @@ class Queen(Pawn):
                 (x + 2, y + 2))
 
             if isinstance(square_behind_opponent, EmptySquare) and square_behind_opponent != previous_square:
-                #captures.append(right_square)
-                jumps = Queen.possible_jumps(square_behind_opponent, board, color, captures + [right_square], square)
+                # captures.append(right_square)
+                jumps = Queen.possible_jumps(
+                    square_behind_opponent, board, color, captures + [right_square], square)
                 # check if array empty
                 if not jumps:
-                    possibleJumps.append( ( (x + 2, y + 2), captures + [right_square] ))
+                    possibleJumps.append(
+                        ((x + 2, y + 2), captures + [right_square]))
                 else:
                     for jump in jumps:
-                     possibleJumps.append(jump)
+                        possibleJumps.append(jump)
 
         left_square = board.get_square((x - 1, y + 1))
 
         if isinstance(left_square, Pawn) and left_square.get_color() != color:
             square_behind_opponent = board.get_square(
-                (x - 2, y + 2 ))
+                (x - 2, y + 2))
 
             if isinstance(square_behind_opponent, EmptySquare) and square_behind_opponent != previous_square:
-                jumps = Queen.possible_jumps(square_behind_opponent, board, color, captures + [left_square], square)
+                jumps = Queen.possible_jumps(
+                    square_behind_opponent, board, color, captures + [left_square], square)
                 if not jumps:
-                    possibleJumps.append(((x - 2, y + 2), captures + [left_square]))
+                    possibleJumps.append(
+                        ((x - 2, y + 2), captures + [left_square]))
                 else:
                     for jump in jumps:
-                     possibleJumps.append(jump)
+                        possibleJumps.append(jump)
 
         bottom_right_square = board.get_square((x + 1, y - 1))
 
@@ -156,11 +161,13 @@ class Queen(Pawn):
                 (x + 2, y - 2))
 
             if isinstance(square_behind_opponent, EmptySquare) and square_behind_opponent != previous_square:
-                #captures.append(right_square)
-                jumps = Queen.possible_jumps(square_behind_opponent, board, color, captures + [bottom_right_square], square)
+                # captures.append(right_square)
+                jumps = Queen.possible_jumps(
+                    square_behind_opponent, board, color, captures + [bottom_right_square], square)
                 # check if array empty
                 if not jumps:
-                    possibleJumps.append( ( (x + 2, y - 2), captures + [bottom_right_square] ))
+                    possibleJumps.append(
+                        ((x + 2, y - 2), captures + [bottom_right_square]))
                 else:
                     for jump in jumps:
                         possibleJumps.append(jump)
@@ -169,16 +176,17 @@ class Queen(Pawn):
 
         if isinstance(bottom_left_square, Pawn) and bottom_left_square.get_color() != color:
             square_behind_opponent = board.get_square(
-                (x - 2, y - 2 ))
+                (x - 2, y - 2))
 
             if isinstance(square_behind_opponent, EmptySquare) and square_behind_opponent != previous_square:
-                jumps = Queen.possible_jumps(square_behind_opponent, board, color, captures + [bottom_left_square], square)
+                jumps = Queen.possible_jumps(
+                    square_behind_opponent, board, color, captures + [bottom_left_square], square)
                 if not jumps:
-                    possibleJumps.append(((x - 2, y - 2), captures + [bottom_left_square]))
+                    possibleJumps.append(
+                        ((x - 2, y - 2), captures + [bottom_left_square]))
                 else:
                     for jump in jumps:
-                     possibleJumps.append(jump)
-
+                        possibleJumps.append(jump)
 
         return possibleJumps
 

@@ -39,11 +39,13 @@ class Game:
         if not isinstance(square, EmptySquare) and square is not None:
             if square.get_color() == self.player_color:
                 self.selected_piece = square
-                self.valid_jumps = self.selected_piece.get_possible_jumps(self.board)
+                self.valid_jumps = self.selected_piece.get_possible_jumps(
+                    self.board)
                 self.valid_moves = []
 
                 if len(self.valid_jumps) == 0:
-                    self.valid_moves = self.selected_piece.get_possible_moves(self.board)
+                    self.valid_moves = self.selected_piece.get_possible_moves(
+                        self.board)
         else:
             if self.selected_piece is not None:
 
@@ -70,5 +72,5 @@ class Game:
         else:
             self.turn = PlayerColor.WHITE
 
-        #DELETE LATER
+        # DELETE LATER
         self.player_color = self.turn

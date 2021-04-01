@@ -3,6 +3,7 @@ import pygame
 from constants import *
 from player_color import PlayerColor
 
+
 def get_coords_from_mouse(position):
     (x, y) = position
 
@@ -21,7 +22,7 @@ def main():
 
     while run:
         clock.tick(FPS)
-        
+
         game.update()
 
         pygame.display.update()

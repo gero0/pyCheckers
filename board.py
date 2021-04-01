@@ -2,6 +2,7 @@ import pygame
 from pawn import EmptySquare, Pawn, Queen
 from player_color import PlayerColor
 
+
 class Board:
     def __init__(self, square_size):
         self.square_size = square_size
@@ -39,7 +40,6 @@ class Board:
 
         if y == 7 or y == 0:
             self.promote_piece(piece)
-        
 
     def capture_piece(self, piece):
         self.board[piece.coordinates] = EmptySquare(piece.coordinates)
@@ -64,6 +64,6 @@ class Board:
 
         for row in range(8):
             for column in range(8):
-                t = isinstance(self.board[(column, row)], EmptySquare) 
+                t = isinstance(self.board[(column, row)], EmptySquare)
                 if not t:
                     self.board[(column, row)].draw(display)
