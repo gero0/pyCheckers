@@ -27,6 +27,7 @@ class Game:
             img1 = self.font.render(
                 "Winner: " + Game.player_color_string(self.winner), False, (0, 0, 0))
             WINDOW.blit(img1, (820, 0))
+            pygame.display.update()
             return
 
         you_img = self.font.render(
